@@ -1,0 +1,87 @@
+1. import pandas
+2. import some data from source np. excel file (to create a panda's data structure)
+panda's data structure - data frame
+
+data frame - special object that will hold a data
+===============================================================
+df=pandas.DataFrame([[2, 4, 6],[10, 20, 30]])
+                       ^ list of lists
+
+Out[3]:
+    0   1   2
+0   2   4   6
+1  10  20  30
+===============================================================
+df=pandas.DataFrame([[2, 4, 6],[10, 20, 30]],columns=["Price","Age","Value"])
+                       ^ list of lists       ^ name of columns, number of names must be equal to the number
+                                               of elements in each row in the DataFrame
+
+Out[11]:
+   Price  Age  Value
+0      2    4      6
+1     10   20     30
+===============================================================
+df=pandas.DataFrame([[2, 4, 6],[10, 20, 30]],columns=["Price","Age","Value"],index=["First","Second"])
+										^ names of rows (=indexes)
+
+Out[13]:
+        Price  Age  Value
+First       2    4      6
+Second     10   20     30
+
+===============================================================
+think of data frame as of table
+we pass a list of lists
+
+===============================================================
+There are other ways to create a DataFrame:
+df2=pandas.DataFrame([{"Name":"John"},{"Name":"Jack"}])
+                                     ^ list of dictionaries
+Out[17]:
+   Name
+0  John
+1  Jack
+
+===============================================================
+df2=pandas.DataFrame([{"Name":"John","Surname":"Johns"},{"Name":"Jack"}])
+
+Out[20]:
+   Name Surname
+0  John   Johns
+1  Jack     NaN
+
+===============================================================
+In [22]: type(df)
+Out[22]: pandas.core.frame.DataFrame
+
+===============================================================
+In [32]: df
+Out[32]:
+        Price  Age  Value
+First       2    4      6
+Second     10   20     30
+
+In [33]: df.mean()
+Out[33]:
+Price     6.0
+Age      12.0
+Value    18.0
+dtype: float64
+
+In [34]: df.mean().mean()
+         ^^^^^^^^^ type(df.mean()) - pandas.core.series.Series
+Out[34]: 12.0
+
+===============================================================
+In [36]: df.Price
+Out[36]:
+First      2
+Second    10
+Name: Price, dtype: int64
+
+In [37]: type(df.Price)
+Out[37]: pandas.core.series.Series
+
+===============================================================
+df=pandas.read_csv("directory")
+

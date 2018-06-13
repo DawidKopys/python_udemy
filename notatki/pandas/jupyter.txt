@@ -1,0 +1,6 @@
+Ctrl+Enter  - run selected lines
+Enter       - Enter edit mode
+Alt+Enter   - run cell and insert below (mo¿esz od razu pisaæ)
+Shift+Enter - run cell, select below (musisz nacisn¹æ enter ¿eby móc pisaæ)
+dd	    - delete cell (must not be in edit mode, must be in command mode)
+edit mode (green) and command mode (blue)

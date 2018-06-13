@@ -1,0 +1,31 @@
+label based indexing
+position based indexing
+
+data frame has column labels and index labels
+column column column
+index
+index
+index
+
+	Address 	City 	Country 	Employees 	ID 	Name 	State
+0 	3666 21st St 	San Francisco 	USA 	8 	1 	Madeira 	CA 94114
+1 	735 Dolores St 	San Francisco 	USA 	15 	2 	Bready Shop 	CA 94119
+2 	332 Hill St 	San Francisco 	USA 	25 	3 	Super River 	California 94114
+3 	3995 23rd St 	San Francisco 	USA 	10 	4 	Ben's Shop 	CA 94114
+4 	1056 Sanchez St 	San Francisco 	USA 	12 	5 	Sanchez 	California
+5 	551 Alvarado St 	San Francisco 	USA 	20 	6 	Richvalley 	CA 94114
+
+
+LABEL BASED INDEXING
+====================
+df7.loc[0]
+df7.loc[0:4,"City"]
+	^^    ^^
+        ||    L==== column labels 
+	index labels
+
+df7 = df7.set_index("Address")
+df7.loc["735 Dolores St":"332 Hill St","Country":"ID"]
+
+list(df7.loc[:,"Country"])
+====================

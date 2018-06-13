@@ -1,0 +1,115 @@
+df1 = pandas.read_csv("supermarkets.csv")
+		^^^ ta funkcja ma parametr header z domyœln¹ wartoœci¹ 1, dziêki temu domyœlnie
+ 		    rozpoznaje nag³ówki
+df1
+
+	ID 	Address 	City 	State 	Country 	Name 	Employees
+0 	1 	3666 21st St 	San Francisco 	CA 94114 	USA 	Madeira 	8
+1 	2 	735 Dolores St 	San Francisco 	CA 94119 	USA 	Bready Shop 	15
+2 	3 	332 Hill St 	San Francisco 	California 94114 	USA 	Super River 	25
+3 	4 	3995 23rd St 	San Francisco 	CA 94114 	USA 	Ben's Shop 	10
+4 	5 	1056 Sanchez St 	San Francisco 	California 	USA 	Sanchez 	12
+5 	6 	551 Alvarado St 	San Francisco 	CA 94114 	USA 	Richvalley 	20
+
+================================================================================================================
+df1 = pandas.read_csv("supermarkets.csv", header=None)
+		^^^ tym razem jawnie ustawiliœmy parametr header na None, wy³¹czyliœmy automatyczne 
+		    rozpoznawanie nag³ówków
+df1
+
+	0 	1 	2 	3 	4 	5 	6
+0 	ID 	Address 	City 	State 	Country 	Name 	Employees
+1 	1 	3666 21st St 	San Francisco 	CA 94114 	USA 	Madeira 	8
+2 	2 	735 Dolores St 	San Francisco 	CA 94119 	USA 	Bready Shop 	15
+3 	3 	332 Hill St 	San Francisco 	California 94114 	USA 	Super River 	25
+4 	4 	3995 23rd St 	San Francisco 	CA 94114 	USA 	Ben's Shop 	10
+5 	5 	1056 Sanchez St 	San Francisco 	California 	USA 	Sanchez 	12
+6 	6 	551 Alvarado St 	San Francisco 	CA 94114 	USA 	Richvalley 	20
+
+================================================================================================================
+df1 = pandas.read_csv("supermarkets.csv")
+
+df1.set_index("ID")
+       ^^^^ set a column with name "ID" as index column
+
+	Address 	City 	State 	Country 	Name 	Employees
+ID 						
+1 	3666 21st St 	San Francisco 	CA 94114 	USA 	Madeira 	8
+2 	735 Dolores St 	San Francisco 	CA 94119 	USA 	Bready Shop 	15
+3 	332 Hill St 	San Francisco 	California 94114 	USA 	Super River 	25
+4 	3995 23rd St 	San Francisco 	CA 94114 	USA 	Ben's Shop 	10
+5 	1056 Sanchez St 	San Francisco 	California 	USA 	Sanchez 	12
+6 	551 Alvarado St 	San Francisco 	CA 94114 	USA 	Richvalley 	20
+
+================================================================================================================
+df1.shape
+
+(6, 7)
+
+================================================================================================================
+df2 = pandas.read_json("supermarkets.json")
+df2
+...
+
+================================================================================================================
+df3 = pandas.read_excel("supermarkets.xlsx")
+df3
+...
+
+================================================================================================================
+df3 = pandas.read_excel("supermarkets.xlsx", sheetname=0)
+						^^^ w przypadku plików excel mo¿na podaæ parametr okreœlaj¹cy
+						    z którego sheet'a chcemy zimportowaæ dane, domyœlnie 0
+df3
+...
+
+================================================================================================================
+df4 = pandas.read_csv("supermarkets-commas.txt")
+		  ^^^	csv		^^^ patrz, read_csv a dzia³a, dlatego ¿e przecinki oddzielaja w tym pliku
+					a parametr separator (sep) ma default value comma - ","
+df4
+...
+
+================================================================================================================
+df5 = pandas.read_csv("supermarkets-semi-colons.txt", sep=";")
+		  ^^^	csv		^^^ w tym przypadku separatory to œredniki(";") wiec podajemy
+					    parametr sep = ";"
+df5
+...
+
+================================================================================================================
+pandas.read_csv?   - wyswietla pomoc
+
+================================================================================================================
+df6 = pandas.read_csv("http://www.pythonhow.com/supermarkets.csv")
+df6
+...
+df7 = pandas.read_json("http://www.pythonhow.com/supermarkets.json")
+df7
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
