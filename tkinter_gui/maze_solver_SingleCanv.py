@@ -16,17 +16,35 @@ from tkinter import ttk
 size = 800
 nr_of_cells = 16
 offset = 20
-down = size+offset
-right = size+offset
 up = offset
 left = offset
+down = size+offset
+right = size+offset
 
 def print_border(parent_canvas):
     #canvas.create_line(x0, y0, x1, y1)
-    parent_canvas.create_line(offset, offset, size+offset, offset)
-    parent_canvas.create_line(offset, offset, offset, size+offset)
-    parent_canvas.create_line(size+offset, offset, size+offset, size+offset)
-    parent_canvas.create_line(offset, size+offset, size+offset, size+offset)
+    parent_canvas.create_line(left, up, right, up, width=2) #gora pozioma
+    parent_canvas.create_line(left, up, left, down, width=2) #lewa pion
+    parent_canvas.create_line(right, up, right, down, width=2) #prawa pion
+    parent_canvas.create_line(left, down, right, down, width=2) #dol poziom
+
+def print_grid(parent_canvas):
+    step = size/nr_of_cells
+    if step%1!=0:   #sprawdzamy czy liczba jest calkowita (czy size jest podzielne przez nr_of_cells)
+        print('error')
+    else:
+        pass
+        x_pion = left
+        y_poziom = up
+        for line in range(nr_of_cells):
+            x_pion = x_pion + step
+            parent_canvas.create_line(x_pion, up, x_pion, down, width=2)
+            y_poziom = y_poziom + step
+            parent_canvas.create_line(left, y_poziom, right, y_poziom, width=2)
+
+def print_outline(parent_canvas):
+    print_border(parent_canvas)
+    print_grid(parent_canvas)
 
 root = Tk()
 # root childs can stretch
@@ -55,18 +73,37 @@ label2.grid(row=0, column=0, sticky=N+S+E+W)
 canvas = Canvas(mazeframe, width=size+2*offset, height=size+2*offset)
 canvas.configure(background='white')
 canvas.grid(row=0, column=0, sticky=N+S+E+W)
-#canvas.create_line(x0, y0, x1, y1)
-print_border(canvas)
 
+#canvas.create_line(x0, y0, x1, y1)
+print_outline(canvas)
+
+# stworzenie listy koordynat punktów (środki cell)
 step = size/nr_of_cells
-if step%1!=0:   #sprawdzamy czy liczba jest calkowita (czy size jest podzielne przez nr_of_cells)
-    print('error')
-else:
-    pass
-    # x = offset
-    # for line in range(nr_of_cells):
-    #     x = x + step
-    #     canvas.create_line(x, )
+crds = []
+for x in range(nr_of_cells):
+    crds.append([])
+    for y in range(nr_of_cells):
+        crds[x].append([int(x*step+offset), int(y*step+offset)])
+
+for row in crds:
+    print(row)
+
+print('crds[0][1] =', crds[0][1])
+print('crds[0][1][0] =', crds[0][1][0])
+print('crds[0][1][1] =', crds[0][1][1])
+
+canvas.create_text(crds[0][1][0], crds[0][1][1], text='A')
+
+# for row in crds:
+#     for col in crds:
+#         print(col[0], col[1])
+#         canvas.create_text(col[0], col[1], text='a')
+
+# crds to lista zawierająca środki cel, lista jest o formacie:
+# [[[x0, y0], [x1, y0], [x2, y0], ...]
+#  [[x0, y1], [x1, y1], [x2, y1], ...]
+#   [[],[],[]]...]
+
 
 
 root.mainloop()
