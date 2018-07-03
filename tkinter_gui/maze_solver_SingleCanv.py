@@ -16,6 +16,7 @@ from tkinter import ttk
 size = 800
 nr_of_cells = 16
 offset = 20
+
 up = offset
 left = offset
 down = size+offset
@@ -42,9 +43,62 @@ def print_grid(parent_canvas):
             y_poziom = y_poziom + step
             parent_canvas.create_line(left, y_poziom, right, y_poziom, width=2)
 
+# funkcja rysująca siatkę labiryntu
+# param:
+#   @parent_canvas - canvas na której rysujemy
+#   @nr_of_cells - ilość komórek w labiryncie
+#   @size - rozmiar labiryntu (dlugosc boku w pixelach)
+#   @offset - odleglosc ramki od krawędzi okna
+# return: none
 def print_outline(parent_canvas):
     print_border(parent_canvas)
     print_grid(parent_canvas)
+
+# funkcja tworząca listę koordynat
+# param:
+#   @nr_of_cells - ilość komórek w labiryncie
+#   @size - rozmiar labiryntu (dlugosc boku w pixelach)
+#   @offset - odleglosc ramki od krawędzi okna
+# return:
+#   #crds - lista zawierająca koordynaty punktów
+#       crds to lista zawierająca środki cel, lista jest o formacie:
+#       [[[x0, y0], [x1, y0], [x2, y0], ...]
+#        [[x0, y1], [x1, y1], [x2, y1], ...]
+#        [[],[],[], ...                    ]...]
+def create_cell_points():
+    step = size/nr_of_cells
+    crds = []
+    for x in range(nr_of_cells):
+        crds.append([])
+        for y in range(nr_of_cells):
+            crds[x].append([int(x*step+offset+step/2), int(y*step+offset+step/2)])
+    return crds
+
+# funkcja rysująca numery komórek
+# param:
+#   @parent_canvas - canvas na której rysujemy
+#   @list_cell_coordinates - lista zawierające koordynaty środków wszystkich komórek
+#                           (return funkcji create_cell_points)
+# return: none
+def print_cells_numbers(parent_canvas, list_cell_coordinates):
+    i = 0
+    for row in range(nr_of_cells):
+        for col in range(nr_of_cells):
+            parent_canvas.create_text(list_cell_coordinates[row][col][0], list_cell_coordinates[row][col][1], text=str(i))
+            i = i + 1
+
+# funkcja rysuje numer komórki o podanym numerze
+# param:
+#   @parent_canvas - canvas na której rysujemy
+#   @list_cell_coordinates - lista zawierające koordynaty środków wszystkich komórek
+#                           (return funkcji create_cell_points)
+#   @number - numer komórki, której numer chcemy narysować
+# return: none
+def print_cell_number(parent_canvas, list_cell_coordinates, number):
+    points_list_flat = [col for row in points_list for col in row]
+    parent_canvas.create_text(points_list_flat[number][0], points_list_flat[number][1], text=str(number))
+
+
 
 root = Tk()
 # root childs can stretch
@@ -78,30 +132,16 @@ canvas.grid(row=0, column=0, sticky=N+S+E+W)
 print_outline(canvas)
 
 # stworzenie listy koordynat punktów (środki cell)
-step = size/nr_of_cells
-crds = []
-for x in range(nr_of_cells):
-    crds.append([])
-    for y in range(nr_of_cells):
-        crds[x].append([int(x*step+offset+step/2), int(y*step+offset+step/2)])
+points_list = create_cell_points()
 
-for row in crds:
+points_list_flat = [col for row in points_list for col in row]
+
+for row in points_list_flat:
     print(row)
 
-print('crds[0][1] =', crds[0][1])
-print('crds[0][1][0] =', crds[0][1][0])
-print('crds[0][1][1] =', crds[0][1][1])
-
-i = 0
-for row in range(nr_of_cells):
-    for col in range(nr_of_cells):
-        canvas.create_text(crds[row][col][0], crds[row][col][1], text=str(i))
-        i = i + 1
-
-# crds to lista zawierająca środki cel, lista jest o formacie:
-# [[[x0, y0], [x1, y0], [x2, y0], ...]
-#  [[x0, y1], [x1, y1], [x2, y1], ...]
-#   [[],[],[]]...]
+# draw cells' numbers
+print_cells_numbers(canvas, points_list)
+# print_cell_number(canvas, points_list, 50)
 
 
 
