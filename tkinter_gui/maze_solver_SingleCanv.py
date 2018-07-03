@@ -83,7 +83,7 @@ crds = []
 for x in range(nr_of_cells):
     crds.append([])
     for y in range(nr_of_cells):
-        crds[x].append([int(x*step+offset), int(y*step+offset)])
+        crds[x].append([int(x*step+offset+step/2), int(y*step+offset+step/2)])
 
 for row in crds:
     print(row)
@@ -92,12 +92,11 @@ print('crds[0][1] =', crds[0][1])
 print('crds[0][1][0] =', crds[0][1][0])
 print('crds[0][1][1] =', crds[0][1][1])
 
-canvas.create_text(crds[0][1][0], crds[0][1][1], text='A')
-
-# for row in crds:
-#     for col in crds:
-#         print(col[0], col[1])
-#         canvas.create_text(col[0], col[1], text='a')
+i = 0
+for row in range(nr_of_cells):
+    for col in range(nr_of_cells):
+        canvas.create_text(crds[row][col][0], crds[row][col][1], text=str(i))
+        i = i + 1
 
 # crds to lista zawierająca środki cel, lista jest o formacie:
 # [[[x0, y0], [x1, y0], [x2, y0], ...]
