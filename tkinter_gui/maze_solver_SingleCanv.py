@@ -29,6 +29,13 @@ def print_border(parent_canvas):
     parent_canvas.create_line(right, up, right, down, width=2) #prawa pion
     parent_canvas.create_line(left, down, right, down, width=2) #dol poziom
 
+def print_walls_border(parent_canvas):
+    #canvas.create_line(x0, y0, x1, y1)
+    parent_canvas.create_line(left, up, right, up, fill='blue', width=5) #gora pozioma
+    parent_canvas.create_line(left, up, left, down, fill='blue', width=5) #lewa pion
+    parent_canvas.create_line(right, up, right, down, fill='blue', width=5) #prawa pion
+    parent_canvas.create_line(left, down, right, down, fill='blue', width=5) #dol poziom
+
 def print_grid(parent_canvas):
     step = size/nr_of_cells
     if step%1!=0:   #sprawdzamy czy liczba jest calkowita (czy size jest podzielne przez nr_of_cells)
@@ -143,6 +150,7 @@ for row in points_list_flat:
 print_cells_numbers(canvas, points_list)
 # print_cell_number(canvas, points_list, 50)
 
-
+#canvas.create_line(x0, y0, x1, y1)
+print_walls_border(canvas)
 
 root.mainloop()
