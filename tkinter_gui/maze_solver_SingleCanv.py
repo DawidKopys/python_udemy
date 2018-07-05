@@ -39,7 +39,7 @@ def print_walls_border(parent_canvas):
 def print_grid(parent_canvas):
     step = size/nr_of_cells
     if step%1!=0:   #sprawdzamy czy liczba jest calkowita (czy size jest podzielne przez nr_of_cells)
-        print('error')
+        print('error, step nie jest liczba calkowita (size jest niepodzielne przez nr_of_cells)')
     else:
         pass
         x_pion = left
@@ -105,6 +105,58 @@ def print_cell_number(parent_canvas, list_cell_coordinates, number):
     points_list_flat = [col for row in points_list for col in row]
     parent_canvas.create_text(points_list_flat[number][0], points_list_flat[number][1], text=str(number))
 
+# funkcja rysuje górną ścianę w komórce o podanym numerze
+# param:
+#   @parent_canvas - canvas na której rysujemy
+#   @cell_coord_x - koordynata x komórki
+#   @cell_coord_y - koordynata y komórki
+#   @dist_centre_to_wall - odległość środka komórki od jej ścian
+# return: none
+def print_wall_N(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
+    parent_canvas.create_line(cell_coord_x - dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
+                              cell_coord_x + dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
+                               fill='blue', width=5)
+
+# funkcja rysuje dolną ścianę w komórce o podanym numerze
+# desc: patrz print_wall_N
+def print_wall_S(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
+    parent_canvas.create_line(cell_coord_x - dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
+                              cell_coord_x + dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
+                              fill='blue', width=5)
+
+# funkcja rysuje prawą ścianę w komórce o podanym numerze
+# desc: patrz print_wall_N
+def print_wall_E(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
+    parent_canvas.create_line(cell_coord_x + dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
+                              cell_coord_x + dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
+                              fill='blue', width=5)
+
+# funkcja rysuje lewą ścianę w komórce o podanym numerze
+# desc: patrz print_wall_N
+def print_wall_W(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
+    parent_canvas.create_line(cell_coord_x - dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
+                              cell_coord_x - dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
+                              fill='blue', width=5)
+
+def print_wall(parent_canvas, cell_list, list_cell_coordinates, **option):
+    points_list_flat = [col for row in points_list for col in row]
+    if type(cell_list) == int:
+        cell_list = [cell_list] #jeśli argument jest pojedyńczą liczbą - utwórz listę, której jedynym elementem jest ta liczba
+    for single_cell in cell_list:
+        cell_x = points_list_flat[single_cell][0]
+        cell_y = points_list_flat[single_cell][1]
+        print('cell_x =',cell_x)
+        print('cell_y =',cell_y)
+        # parent_canvas.create_text(cell_x, cell_y, text='A') #sprawdz czy w dobrym miejscu
+        step = (size/nr_of_cells)/2
+        if N in option.get('side'):
+            print_wall_N(parent_canvas, cell_x, cell_y, step)
+        if S in option.get('side'):
+            print_wall_S(parent_canvas, cell_x, cell_y, step)
+        if E in option.get('side'):
+            print_wall_E(parent_canvas, cell_x, cell_y, step)
+        if W in option.get('side'):
+            print_wall_W(parent_canvas, cell_x, cell_y, step)
 
 
 root = Tk()
@@ -141,10 +193,10 @@ print_outline(canvas)
 # stworzenie listy koordynat punktów (środki cell)
 points_list = create_cell_points()
 
-points_list_flat = [col for row in points_list for col in row]
-
-for row in points_list_flat:
-    print(row)
+# points_list_flat = [col for row in points_list for col in row]
+#
+# for row in points_list_flat:
+#     print(row)
 
 # draw cells' numbers
 print_cells_numbers(canvas, points_list)
@@ -152,5 +204,14 @@ print_cells_numbers(canvas, points_list)
 
 #canvas.create_line(x0, y0, x1, y1)
 print_walls_border(canvas)
+
+print_wall(canvas, 34, points_list, side=S)
+
+walls_in = [34, 50, 66, 82, 98, 114]
+for wall in walls_in:
+    print_wall(canvas, wall, points_list, side=N)
+
+walls_in2 = [wall+3 for wall in walls_in]
+print_wall(canvas, walls_in2, points_list, side=W)
 
 root.mainloop()
