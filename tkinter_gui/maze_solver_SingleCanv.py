@@ -16,6 +16,7 @@ from tkinter import ttk
 size = 800
 nr_of_cells = 16
 offset = 20
+maze_layout_filename = 'maze2.txt'
 
 up = offset
 left = offset
@@ -88,7 +89,7 @@ def create_cell_points():
 #                           (return funkcji create_cell_points)
 # return: none
 def print_cells_numbers(parent_canvas, list_cell_coordinates):
-    i = 0
+    i = 1 #todo: change back to 0
     for row in range(nr_of_cells):
         for col in range(nr_of_cells):
             parent_canvas.create_text(list_cell_coordinates[row][col][0], list_cell_coordinates[row][col][1], text=str(i))
@@ -145,9 +146,6 @@ def print_wall(parent_canvas, cell_list, list_cell_coordinates, **option):
     for single_cell in cell_list:
         cell_x = points_list_flat[single_cell][0]
         cell_y = points_list_flat[single_cell][1]
-        print('cell_x =',cell_x)
-        print('cell_y =',cell_y)
-        # parent_canvas.create_text(cell_x, cell_y, text='A') #sprawdz czy w dobrym miejscu
         step = (size/nr_of_cells)/2
         if N in option.get('side'):
             print_wall_N(parent_canvas, cell_x, cell_y, step)
@@ -158,6 +156,30 @@ def print_wall(parent_canvas, cell_list, list_cell_coordinates, **option):
         if W in option.get('side'):
             print_wall_W(parent_canvas, cell_x, cell_y, step)
 
+def read_maze_layout(filename):
+    with open(filename, 'r') as maze_layout_f:
+        maze_layout_cont = maze_layout_f.readlines()
+    maze_layout = [[int(line[0]), int(line[2]), int(line[4]), int(line[6]),] for line in maze_layout_cont]
+    return maze_layout
+
+def print_maze(parent_canvas, maze_layout_list, list_cell_coordinates):
+    ind = 0
+    side = ''
+    for cell in maze_layout_list:
+        if cell[0] == 1:
+            side += N
+        if cell[1] == 1:
+            side += E
+        if cell[2] == 1:
+            side += S
+        if cell[3] == 1:
+            side += W
+        if side != '':
+            print('ind =', ind)
+            print('cell =', cell)
+        print_wall(parent_canvas, ind, list_cell_coordinates, side=side)
+        side = ''
+        ind = ind + 1
 
 root = Tk()
 # root childs can stretch
@@ -205,13 +227,12 @@ print_cells_numbers(canvas, points_list)
 #canvas.create_line(x0, y0, x1, y1)
 print_walls_border(canvas)
 
-print_wall(canvas, 34, points_list, side=S)
+# narysuj południową ścianę 20-stej komórki
+# print_wall(canvas, 20, points_list, side=S)
 
-walls_in = [34, 50, 66, 82, 98, 114]
-for wall in walls_in:
-    print_wall(canvas, wall, points_list, side=N)
+# wczytaj mapę labiryntu z pliku (do listy, patrz nagłówek pliku)
+maze_layout = read_maze_layout(maze_layout_filename)
 
-walls_in2 = [wall+3 for wall in walls_in]
-print_wall(canvas, walls_in2, points_list, side=W)
+print_maze(canvas, maze_layout, points_list)
 
 root.mainloop()
