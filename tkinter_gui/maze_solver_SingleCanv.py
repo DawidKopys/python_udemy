@@ -5,6 +5,8 @@ from tkinter import ttk
 # W   E
 #   S
 
+# https://www.google.pl/search?q=micromouse+maze&rlz=1C1GGRV_enPL781PL781&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi2-p2YzIrcAhUCzaQKHWwFDnIQ_AUICigB&biw=1280&bih=903&safe=active&ssui=on#imgrc=GOIGljgDZrhBzM:
+
 # Labirynt ma wymiar 16x16, mapa labiryntu przechowywana będzie więc
 # w liście, w której będzie 16 list, każda o długości 16 elementów.
 # Każdy element przedstawia pojedyńczą komórkę labiryntu, zakodowane są
@@ -17,6 +19,8 @@ size = 800
 nr_of_cells = 16
 offset = 20
 maze_layout_filename = 'maze2.txt'
+grid_width = 1
+walls_width = 9
 
 up = offset
 left = offset
@@ -25,17 +29,17 @@ right = size+offset
 
 def print_border(parent_canvas):
     #canvas.create_line(x0, y0, x1, y1)
-    parent_canvas.create_line(left, up, right, up, width=2) #gora pozioma
-    parent_canvas.create_line(left, up, left, down, width=2) #lewa pion
-    parent_canvas.create_line(right, up, right, down, width=2) #prawa pion
-    parent_canvas.create_line(left, down, right, down, width=2) #dol poziom
+    parent_canvas.create_line(left, up, right, up, width=grid_width) #gora pozioma
+    parent_canvas.create_line(left, up, left, down, width=grid_width) #lewa pion
+    parent_canvas.create_line(right, up, right, down, width=grid_width) #prawa pion
+    parent_canvas.create_line(left, down, right, down, width=grid_width) #dol poziom
 
 def print_walls_border(parent_canvas):
     #canvas.create_line(x0, y0, x1, y1)
-    parent_canvas.create_line(left, up, right, up, fill='blue', width=5) #gora pozioma
-    parent_canvas.create_line(left, up, left, down, fill='blue', width=5) #lewa pion
-    parent_canvas.create_line(right, up, right, down, fill='blue', width=5) #prawa pion
-    parent_canvas.create_line(left, down, right, down, fill='blue', width=5) #dol poziom
+    parent_canvas.create_line(left, up, right, up, fill='blue', width=walls_width) #gora pozioma
+    parent_canvas.create_line(left, up, left, down, fill='blue', width=walls_width) #lewa pion
+    parent_canvas.create_line(right, up, right, down, fill='blue', width=walls_width) #prawa pion
+    parent_canvas.create_line(left, down, right, down, fill='blue', width=walls_width) #dol poziom
 
 def print_grid(parent_canvas):
     step = size/nr_of_cells
@@ -47,9 +51,9 @@ def print_grid(parent_canvas):
         y_poziom = up
         for line in range(nr_of_cells):
             x_pion = x_pion + step
-            parent_canvas.create_line(x_pion, up, x_pion, down, width=2)
+            parent_canvas.create_line(x_pion, up, x_pion, down, width=grid_width)
             y_poziom = y_poziom + step
-            parent_canvas.create_line(left, y_poziom, right, y_poziom, width=2)
+            parent_canvas.create_line(left, y_poziom, right, y_poziom, width=grid_width)
 
 # funkcja rysująca siatkę labiryntu
 # param:
@@ -116,28 +120,28 @@ def print_cell_number(parent_canvas, list_cell_coordinates, number):
 def print_wall_N(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
     parent_canvas.create_line(cell_coord_x - dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
                               cell_coord_x + dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
-                               fill='blue', width=5)
+                               fill='blue', width=walls_width)
 
 # funkcja rysuje dolną ścianę w komórce o podanym numerze
 # desc: patrz print_wall_N
 def print_wall_S(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
     parent_canvas.create_line(cell_coord_x - dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
                               cell_coord_x + dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
-                              fill='blue', width=5)
+                              fill='blue', width=walls_width)
 
 # funkcja rysuje prawą ścianę w komórce o podanym numerze
 # desc: patrz print_wall_N
 def print_wall_E(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
     parent_canvas.create_line(cell_coord_x + dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
                               cell_coord_x + dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
-                              fill='blue', width=5)
+                              fill='blue', width=walls_width)
 
 # funkcja rysuje lewą ścianę w komórce o podanym numerze
 # desc: patrz print_wall_N
 def print_wall_W(parent_canvas, cell_coord_x, cell_coord_y, dist_centre_to_wall):
     parent_canvas.create_line(cell_coord_x - dist_centre_to_wall, cell_coord_y - dist_centre_to_wall,
                               cell_coord_x - dist_centre_to_wall, cell_coord_y + dist_centre_to_wall,
-                              fill='blue', width=5)
+                              fill='blue', width=walls_width)
 
 def print_wall(parent_canvas, cell_list, list_cell_coordinates, **option):
     points_list_flat = [col for row in points_list for col in row]
