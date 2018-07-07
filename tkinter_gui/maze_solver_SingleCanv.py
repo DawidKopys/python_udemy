@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, filedialog
 
 #   N
 # W   E
@@ -18,7 +18,6 @@ from tkinter import ttk
 size = 800
 nr_of_cells = 16
 offset = 20
-maze_layout_filename = 'maze2.txt'
 grid_width = 1
 walls_width = 9
 
@@ -167,6 +166,7 @@ def read_maze_layout(filename):
     return maze_layout
 
 def print_maze(parent_canvas, maze_layout_list, list_cell_coordinates):
+    print_walls_border(parent_canvas)
     ind = 0
     side = ''
     for cell in maze_layout_list:
@@ -178,12 +178,23 @@ def print_maze(parent_canvas, maze_layout_list, list_cell_coordinates):
             side += S
         if cell[3] == 1:
             side += W
-        if side != '':
-            print('ind =', ind)
-            print('cell =', cell)
         print_wall(parent_canvas, ind, list_cell_coordinates, side=side)
         side = ''
         ind = ind + 1
+
+def load_maze_layout(parent_root, draw_maze_button):
+    try:
+        parent_root.filename = filedialog.askopenfilename(initialdir = ".",title = "Select file",
+                                                filetypes = (("text files","*.txt"),("all files","*.*")))
+        # wczytaj mapę labiryntu z pliku (do listy, patrz nagłówek pliku)
+        parent_root.mazelayout = read_maze_layout(parent_root.filename)
+        draw_maze_button.state(['!disabled'])
+    except ValueError:
+        print('ValueError file')
+
+def clear_maze_layout(parent_canvas):
+    canvas.delete("all")
+
 
 root = Tk()
 # root childs can stretch
@@ -203,10 +214,9 @@ menuframe.configure(borderwidth=2, relief='sunken')
 menuframe.columnconfigure(0, weight=2)
 menuframe.rowconfigure(0, weight=2)
 
-label2 = ttk.Label(menuframe)
-label2.configure(background='blue', width='20')
-label2.grid(row=0, column=0, sticky=N+S+E+W)
-
+# label2 = ttk.Label(menuframe)
+# label2.configure(background='blue', width='20')
+# label2.grid(row=0, column=0, sticky=N+S+E+W)
 # create Canvas
 
 canvas = Canvas(mazeframe, width=size+2*offset, height=size+2*offset)
@@ -226,17 +236,15 @@ points_list = create_cell_points()
 
 # draw cells' numbers
 print_cells_numbers(canvas, points_list)
-# print_cell_number(canvas, points_list, 50)
 
-#canvas.create_line(x0, y0, x1, y1)
-print_walls_border(canvas)
+b_draw_maze = ttk.Button(menuframe, text='Draw Maze', state=DISABLED, command=lambda : print_maze(canvas, root.mazelayout, points_list))
+b_open_maze_file = ttk.Button(menuframe, text='Load Maze Layout', command= lambda : load_maze_layout(root, b_draw_maze))
+# b_clear_maze = ttk.Button(menuframe, text='Clear Maze Layout', command= lambda : clear_maze_layout(canvas))
+b_draw_maze.grid()
+b_open_maze_file.grid()
 
-# narysuj południową ścianę 20-stej komórki
-# print_wall(canvas, 20, points_list, side=S)
-
-# wczytaj mapę labiryntu z pliku (do listy, patrz nagłówek pliku)
-maze_layout = read_maze_layout(maze_layout_filename)
-
-print_maze(canvas, maze_layout, points_list)
+b_draw_maze.focus()
+root.bind('<Return>', lambda x: print_maze(canvas, maze_layout, points_list))
+# root.bind('<Escape>', lambda x: )
 
 root.mainloop()
