@@ -20,6 +20,7 @@ nr_of_cells = 16
 offset = 20
 grid_width = 1
 walls_width = 9
+points_list = []
 
 up = offset
 left = offset
@@ -182,13 +183,14 @@ def print_maze(parent_canvas, maze_layout_list, list_cell_coordinates):
         side = ''
         ind = ind + 1
 
-def load_maze_layout(parent_root, draw_maze_button):
+def load_maze_layout(parent_root, draw_maze_button, parent_canvas):
     try:
         parent_root.filename = filedialog.askopenfilename(initialdir = ".",title = "Select file",
                                                 filetypes = (("text files","*.txt"),("all files","*.*")))
         # wczytaj mapę labiryntu z pliku (do listy, patrz nagłówek pliku)
         parent_root.mazelayout = read_maze_layout(parent_root.filename)
         draw_maze_button.state(['!disabled'])
+        parent_root.bind('<Return>', lambda x: print_maze(parent_canvas, root.mazelayout, points_list))
     except ValueError:
         print('ValueError file')
 
@@ -238,13 +240,13 @@ points_list = create_cell_points()
 print_cells_numbers(canvas, points_list)
 
 b_draw_maze = ttk.Button(menuframe, text='Draw Maze', state=DISABLED, command=lambda : print_maze(canvas, root.mazelayout, points_list))
-b_open_maze_file = ttk.Button(menuframe, text='Load Maze Layout', command= lambda : load_maze_layout(root, b_draw_maze))
-# b_clear_maze = ttk.Button(menuframe, text='Clear Maze Layout', command= lambda : clear_maze_layout(canvas))
+b_open_maze_file = ttk.Button(menuframe, text='Load Maze Layout', command= lambda : load_maze_layout(root, b_draw_maze, canvas))
+b_clear_maze = ttk.Button(menuframe, text='Clear Maze Layout', command= lambda : clear_maze_layout(canvas))
 b_draw_maze.grid()
+b_clear_maze.grid()
 b_open_maze_file.grid()
 
 b_draw_maze.focus()
-root.bind('<Return>', lambda x: print_maze(canvas, maze_layout, points_list))
-# root.bind('<Escape>', lambda x: )
+root.bind('<Control-c>', lambda x: clear_maze_layout(canvas))
 
 root.mainloop()
