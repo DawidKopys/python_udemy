@@ -46,8 +46,9 @@ def update(id, title, author, year, isbn):
 
 connect()
 
-# insert('The Sun', 'John Wick', 1969, 123451234)
-print(view())
-s = search(author='John Smith')
-update(s[0][0], s[0][1], s[0][2], 1111, s[0][4])
-print(view())
+if __name__=='__main__':
+    # insert('The Sun', 'John Wick', 1969, 123451234)
+    print(view())
+    # s = search(author='John Smith')
+    # update(s[0][0], s[0][1], s[0][2], 1111, s[0][4])
+    # print(view())

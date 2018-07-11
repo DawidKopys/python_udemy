@@ -16,6 +16,22 @@ from tkinter import *
 from tkinter import ttk
 import backend
 
+def view_command():
+    list_box.delete(0, END)
+    cont = backend.view()
+    for row in cont:
+        list_box.insert(END, row)
+
+def search_command():
+    list_box.delete(0, END)
+    cont = backend.search(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
+    for row in cont:
+        list_box.insert(END, row)
+        # list_box.select_set(cont)
+
+def update_command():
+    
+
 root = Tk()
 
 l1 = Label(root, text='Title')
@@ -46,7 +62,7 @@ isbn_text = StringVar()
 e4 = ttk.Entry(root, textvariable=isbn_text)
 e4.grid(row=1, column=3)
 
-list_box = Listbox(root, height=6, width=35)
+list_box = Listbox(root, height=6, width=45)
 list_box.grid(row=2, column=0, rowspan=6, columnspan=2)
 
 scroll_bar = ttk.Scrollbar(root)
@@ -55,13 +71,13 @@ scroll_bar.grid(row=2, column=2, rowspan=6)
 list_box.configure(yscrollcommand=scroll_bar.set)
 scroll_bar.configure(command=list_box.yview)
 
-b1 = ttk.Button(root, text='View all', width=12)
+b1 = ttk.Button(root, text='View all', width=12, command=view_command)
 b1.grid(row=2, column=3)
 
-b2 = ttk.Button(root, text='Search entry', width=12)
+b2 = ttk.Button(root, text='Search entry', width=12, command=search_command)
 b2.grid(row=3, column=3)
 
-b3 = ttk.Button(root, text='Add entry', width=12)
+b3 = ttk.Button(root, text='Add entry', width=12, command=update_command)
 b3.grid(row=4, column=3)
 
 b4 = ttk.Button(root, text='Update', width=12)
