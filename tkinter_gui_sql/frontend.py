@@ -20,22 +20,20 @@ import backend
 # the 'event' parameter holds information about the type of the event
 def get_selected_row(event):
     global selected_row
-    index = list_box.curselection()[0]
-    selected_row = list_box.get(index)
-    # we also want to fill entreis with selected row values
-    # todo...
-    e1.delete(0, END)
-    e2.delete(0, END)
-    e3.delete(0, END)
-    e4.delete(0, END)
-    e1.insert(END, selected_row[1])
-    e2.insert(END, selected_row[2])
-    e3.insert(END, selected_row[3])
-    e4.insert(END, selected_row[4])
-    # title_text.set(selected_row[1])
-    # year_text.set(selected_row[2])
-    # author_text.set(selected_row[3])
-    # isbn_text.set(selected_row[4])
+    try:
+        index = list_box.curselection()[0]
+        selected_row = list_box.get(index)
+        # fill entreis with selected row values
+        e1.delete(0, END)
+        e2.delete(0, END)
+        e3.delete(0, END)
+        e4.delete(0, END)
+        e1.insert(END, selected_row[1])
+        e2.insert(END, selected_row[3])
+        e3.insert(END, selected_row[2])
+        e4.insert(END, selected_row[4])
+    except IndexError:
+        pass
 
 def view_command():
     list_box.delete(0, END)
@@ -53,21 +51,21 @@ def search_command():
 def insert_command():
     backend.insert(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
     list_box.delete(0, END)
-    # view_command()
-    list_box.insert(END, (title_text.get(), author_text.get(), year_text.get(), isbn_text.get()))#wg mnie zamiast tej linii powinna być ta zakomentowana na górze
+    view_command()
+    # list_box.insert(END, (title_text.get(), author_text.get(), year_text.get(), isbn_text.get()))#wg mnie zamiast tej linii powinna być ta zakomentowana na górze
 
 def update_command():
     backend.update(selected_row[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
-    # view_command()
+    view_command()
 
 def delete_command():
     backend.delete(selected_row[0])
-    # view_command()
+    view_command()
     # nie da się tutaj, bez tego bind i get_selected_row?
 
 root = Tk()
 
-window.wm_title('BookStore')
+root.wm_title('BookStore')
 
 l1 = Label(root, text='Title')
 l1.grid(row=0, column=0)
@@ -106,7 +104,6 @@ scroll_bar.grid(row=2, column=2, rowspan=6)
 list_box.configure(yscrollcommand=scroll_bar.set)
 scroll_bar.configure(command=list_box.yview)
 
-<<<<<<< HEAD
 # list_box.bind(event_type, function_to_be_bound_to_the_event)
 list_box.bind('<<ListboxSelect>>', get_selected_row)
 
@@ -126,7 +123,7 @@ b4.grid(row=5, column=3)
 b5 = ttk.Button(root, text='Delete', width=12, command=delete_command)
 b5.grid(row=6, column=3)
 
-b6 = ttk.Button(root, text='Close', width=12, command=root.destroy())
+b6 = ttk.Button(root, text='Close', width=12, command=root.destroy)
 b6.grid(row=7, column=3)
 
 root.mainloop()
